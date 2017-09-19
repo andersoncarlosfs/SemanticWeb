@@ -21,7 +21,8 @@ public class ReasoningForwardChainingOptimised extends AlogrithmChaining {
 	 * @return the saturation of KB w.r.t. facts (the minimal fix point of KB from facts)
 	 */
 	public FactBase forwardChainingOptimise(Formalism ruleBase, Formalism factBase){
-            FactBase fB = (FactBase) factBase;
+            FactBase fB = new FactBase();
+            fB.getFact().addAll(((FactBase) factBase).getFact());
             for (Variable fact : ((FactBase) factBase).getFact()) {
                 fB.getFact().addAll(propagate(fact, (HornRuleBase) ruleBase).getFact());
             }
@@ -30,8 +31,8 @@ public class ReasoningForwardChainingOptimised extends AlogrithmChaining {
 
  
 	public boolean entailment(Formalism ruleBase, Formalism factBase, Formalism query) {
-		FactBase allInferredFacts = forwardChainingOptimise(ruleBase, factBase);
-		if(allInferredFacts.getFact().contains(query))
+		FactBase allInferredFacts = forwardChainingOptimise(ruleBase, factBase);              
+                if(allInferredFacts.getFact().contains(query))
 			return true;
 		else
 			return false;
@@ -44,22 +45,39 @@ public class ReasoningForwardChainingOptimised extends AlogrithmChaining {
 	}
         
         public FactBase propagate(Variable fact, HornRuleBase ruleBase) {
-            FactBase factBase = new FactBase();
-            for (HornRule rule : ruleBase.getRules()) {
-                
+            FactBase fB = new FactBase();
+            for (HornRule rule : inRuleConditions(fact, ruleBase).getRules()) {
+                Variable v = null;
+                for (Variable condition : rule.getConditions()) {
+                    if (condition.getNomVariable().equals(fact.getNomVariable())) {
+                        v = condition;
+                        break;
+                    }
+                }
+                rule.getConditions().remove(v);
+                if (rule.getConditions().isEmpty()) {
+                    ruleBase.getRules().remove(rule);
+                    fB.getFact().addAll(rule.getConclusions());
+                }
             }
-            return null;
+            FactBase factBase = new FactBase(fB.getFact());
+            for (Variable f : fB.getFact()) {
+                factBase.getFact().addAll(propagate(f, ruleBase).getFact());
+            }
+            return factBase;
         }
         
         public HornRuleBase inRuleConditions(Variable fact, HornRuleBase ruleBase) {
             HornRuleBase rB = new HornRuleBase();
             for (HornRule rule : ruleBase.getRules()) {
                 for (Variable condition : rule.getConditions()) {
-                    if (true) {
-                        
+                    if (condition.getNomVariable().equals(fact.getNomVariable())) {
+                        rB.getRules().add(rule);
+                        break;
                     }
                 }
             }
+            return rB;
         }
 
 }

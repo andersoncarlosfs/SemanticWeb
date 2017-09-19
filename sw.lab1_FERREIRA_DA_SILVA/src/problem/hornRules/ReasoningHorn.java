@@ -10,7 +10,7 @@ public class ReasoningHorn {
 
 	public static void main(String[] args) {
 		
-		ReasoningForwardChaining reasoner = new ReasoningForwardChaining();
+		ReasoningForwardChainingOptimised reasoner = new ReasoningForwardChainingOptimised();
 		Tutorial1 pb = new Tutorial1();
 		HornRuleBase kb = pb.getRuleBase();
 		FactBase fb = pb.getFactBase();
@@ -22,7 +22,7 @@ public class ReasoningHorn {
 		System.out.print(fb);
 		
 		//Display all facts inferred by the given knowledge base kb and fact base fb
-		HashSet<Variable> inferredAllFacts = reasoner.forwardChaining(kb,fb).getFact();
+		HashSet<Variable> inferredAllFacts = reasoner.forwardChainingOptimise(kb,fb).getFact();
 		System.out.println("All the inferred facts are:");
 		for(Variable s: inferredAllFacts){
 			System.out.println(s);
