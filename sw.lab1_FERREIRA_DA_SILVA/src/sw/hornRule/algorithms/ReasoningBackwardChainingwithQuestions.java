@@ -6,7 +6,7 @@ package sw.hornRule.algorithms;
 import sw.hornRule.models.Formalism;
 
 /**
- * @author  <Your name>
+ * @author  Anderson Carlos Ferreira da Silva
  *
  */
 public class ReasoningBackwardChainingwithQuestions extends AlogrithmChaining {
