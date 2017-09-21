@@ -15,6 +15,7 @@ import sw.hornRule.models.Variable;
  */
 public class ReasoningBackwardChaining extends AlogrithmChaining {
 
+    @Override
     public boolean entailment(Formalism ruleBase, Formalism factBase, Formalism query) {
         return backwardChaining(ruleBase, factBase, query);
     }
@@ -26,7 +27,7 @@ public class ReasoningBackwardChaining extends AlogrithmChaining {
         }
         for (HornRule rule : ((HornRuleBase) ruleBase).getRules()) {
             boolean conclusion = false;
-            if (rule.getConclusions().contains(query)) {
+            if (rule.getConclusions().contains((Variable) query)) {
                 conclusion = true;
                 for (Variable condition : rule.getConditions()) {
                     if (!backwardChaining(ruleBase, fB, condition)) {
