@@ -9,7 +9,7 @@ public class ReasoningHorn {
 
     public static void main(String[] args) {
 
-        ReasoningForwardChaining reasoner = new ReasoningForwardChaining();
+        AlogrithmChaining reasoner = new ReasoningBackwardChaining();
         Tutorial1 pb = new Tutorial1();
         HornRuleBase kb = pb.getRuleBase();
         FactBase fb = pb.getFactBase();
@@ -24,12 +24,14 @@ public class ReasoningHorn {
         System.out.println("The fact base is:");
         System.out.println(fb);
 
+        /*
         //Display all facts inferred by the given knowledge base kb and fact base fb
-        HashSet<Variable> inferredAllFacts = reasoner.forwardChaining(kb, fb).getFact();
+        HashSet<Variable> inferredAllFacts = ((ReasoningForwardChainingOptimised) reasoner).forwardChaining(kb, fb).getFact();
         System.out.println("All the inferred facts are:");
         for (Variable s : inferredAllFacts) {
             System.out.println(s);
         }
+        */
 
         Variable q = new Variable("transoceanic_race");
         if (reasoner.entailment(kb, fb, q)) {

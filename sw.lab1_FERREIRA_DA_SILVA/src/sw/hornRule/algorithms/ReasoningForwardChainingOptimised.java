@@ -21,7 +21,7 @@ public class ReasoningForwardChainingOptimised extends AlogrithmChaining {
      * @return the saturation of KB w.r.t. facts (the minimal fix point of KB
      * from facts)
      */
-    public FactBase forwardChainingOptimise(Formalism ruleBase, Formalism factBase) {
+    public FactBase forwardChaining(Formalism ruleBase, Formalism factBase) {
         FactBase fB = new FactBase();
         fB.getFact().addAll(((FactBase) factBase).getFact());
         for (Variable fact : ((FactBase) factBase).getFact()) {
@@ -32,7 +32,7 @@ public class ReasoningForwardChainingOptimised extends AlogrithmChaining {
 
     @Override
     public boolean entailment(Formalism ruleBase, Formalism factBase, Formalism query) {
-        FactBase allInferredFacts = forwardChainingOptimise(ruleBase, factBase);
+        FactBase allInferredFacts = forwardChaining(ruleBase, factBase);
         return allInferredFacts.getFact().contains((Variable) query);
     }
 

@@ -8,7 +8,7 @@ import sw.hornRule.models.Formalism;
 import sw.hornRule.models.Variable;
 
 /**
- * @author  Anderson Carlos Ferreira da Silva
+ * @author Anderson Carlos Ferreira da Silva
  *
  */
 public class ReasoningBackwardChaining extends AlogrithmChaining {
@@ -17,8 +17,7 @@ public class ReasoningBackwardChaining extends AlogrithmChaining {
         return backwardChaining(ruleBase, factBase, query);
     }
 
-    private boolean backwardChaining(Formalism ruleBase, Formalism factBase,
-            Formalism query) {
+    private boolean backwardChaining(Formalism ruleBase, Formalism factBase, Formalism query) {
         if (true) {
 
         }
