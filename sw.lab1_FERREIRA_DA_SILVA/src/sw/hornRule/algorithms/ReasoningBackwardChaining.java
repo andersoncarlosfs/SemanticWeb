@@ -5,6 +5,8 @@ package sw.hornRule.algorithms;
 
 import sw.hornRule.models.FactBase;
 import sw.hornRule.models.Formalism;
+import sw.hornRule.models.HornRule;
+import sw.hornRule.models.HornRuleBase;
 import sw.hornRule.models.Variable;
 
 /**
@@ -18,8 +20,24 @@ public class ReasoningBackwardChaining extends AlogrithmChaining {
     }
 
     private boolean backwardChaining(Formalism ruleBase, Formalism factBase, Formalism query) {
-        if (true) {
-
+        FactBase fB = new FactBase(((FactBase) factBase).getFact());
+        if (match((Variable) query, fB)) {
+            return true;
+        }
+        for (HornRule rule : ((HornRuleBase) ruleBase).getRules()) {
+            boolean conclusion = false;
+            if (rule.getConclusions().contains(query)) {
+                conclusion = true;
+                for (Variable condition : rule.getConditions()) {
+                    if (!backwardChaining(ruleBase, fB, condition)) {
+                        conclusion = false;
+                        break;
+                    }
+                }
+            }
+            if (conclusion) {
+                return true;
+            }
         }
         return false;
     }
@@ -34,12 +52,7 @@ public class ReasoningBackwardChaining extends AlogrithmChaining {
      *
      */
     private boolean match(Variable query, FactBase factBase) {
-        for (Variable fact : factBase.getFact()) {
-            if (fact.getNomVariable().equals(query.getNomVariable())) {
-                return true;
-            }
-        }
-        return false;
+        return factBase.getFact().contains(query);
     }
 
 }
