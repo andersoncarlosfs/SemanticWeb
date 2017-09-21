@@ -34,6 +34,11 @@ public class Variable extends Formalism {
         return variableName;
     }
 
+    @Override
+    public int hashCode() {
+        return variableName != null ? variableName.hashCode() : 0;
+    }
+
     /**
      *
      * @param obj

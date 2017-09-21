@@ -24,9 +24,9 @@ public class ReasoningForwardChaining extends AlogrithmChaining {
      */
     //It's your turn to implement the algorithm, including the methods match() and eval()
     public FactBase forwardChaining(Formalism ruleBase, Formalism factBase) {
-        FactBase fB = (FactBase) factBase;
+        FactBase fB = new FactBase(((FactBase) factBase).getFact());
         do {
-            factBase = fB;
+            ((FactBase) factBase).getFact().addAll(fB.getFact());
             HornRuleBase visited = new HornRuleBase();
             for (HornRule rule : ((HornRuleBase) ruleBase).getRules()) {
                 if (eval(rule, (FactBase) factBase)) {
@@ -55,7 +55,7 @@ public class ReasoningForwardChaining extends AlogrithmChaining {
      *
      */
     private boolean eval(HornRule rule, FactBase factBase) {
-        return rule.getConditions().containsAll(factBase.getFact());
+        return factBase.getFact().containsAll(rule.getConditions());
     }
 
 }
