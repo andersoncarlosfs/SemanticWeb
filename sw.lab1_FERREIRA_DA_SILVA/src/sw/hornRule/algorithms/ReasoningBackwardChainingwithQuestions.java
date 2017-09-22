@@ -3,6 +3,7 @@
  */
 package sw.hornRule.algorithms;
 
+import java.util.Scanner;
 import sw.hornRule.models.FactBase;
 import sw.hornRule.models.Formalism;
 import sw.hornRule.models.HornRule;
@@ -15,6 +16,12 @@ import sw.hornRule.models.Variable;
  */
 public class ReasoningBackwardChainingwithQuestions extends AlogrithmChaining {
 
+    private final Scanner CONSOLE;
+    
+    public ReasoningBackwardChainingwithQuestions(Scanner scanner) {
+        CONSOLE = scanner;
+    }
+    
     @Override
     public boolean entailment(Formalism ruleBase, Formalism factBase, Formalism query) {
         // TODO To complete
@@ -43,7 +50,7 @@ public class ReasoningBackwardChainingwithQuestions extends AlogrithmChaining {
                 return true;
             }
         }
-        return false;
+        return ask((Variable) query);
     }
 
     @Override
@@ -57,6 +64,16 @@ public class ReasoningBackwardChainingwithQuestions extends AlogrithmChaining {
      */
     private boolean match(Variable query, FactBase factBase) {
         return factBase.getFact().contains(query);
+    }
+
+    /**
+     *
+     * @param query
+     * @return
+     */
+    private boolean ask(Variable query) {
+        System.out.println("Is " + query + " a fact? (Y/N): ");
+        return CONSOLE.nextLine().equalsIgnoreCase("y");
     }
 
 }
