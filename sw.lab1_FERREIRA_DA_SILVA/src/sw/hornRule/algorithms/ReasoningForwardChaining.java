@@ -42,7 +42,7 @@ public class ReasoningForwardChaining extends AlogrithmChaining {
         do {
             fB.getFact().addAll(nfB.getFact());
             /*
-                    HornRuleBase visited = new HornRuleBase();
+            HornRuleBase rules = new HornRuleBase();
             realisableRules.putIfAbsent(interactionNumber, new HashSet<>());
             deducedFacts.putIfAbsent(interactionNumber, new HashSet<>());
             matchesNumber.putIfAbsent(interactionNumber, new HashMap<>());
@@ -50,7 +50,7 @@ public class ReasoningForwardChaining extends AlogrithmChaining {
             for (HornRule rule : rB.getRules()) {
                 if (eval(rule, (FactBase) fB)) {
                     nfB.getFact().addAll(rule.getConclusions());
-                    //visited.getRules().add(rule);
+                    //rules.getRules().add(rule);
                     //realisableRules.get(interactionNumber).add(rule);
                     /*
                     for (Variable conclusion : rule.getConclusions()) {
@@ -61,7 +61,7 @@ public class ReasoningForwardChaining extends AlogrithmChaining {
                      */
                 }
             }
-            //rB.getRules().removeAll(visited.getRules());
+            //rB.getRules().removeAll(rules.getRules());
             //interactionNumber++;
         } while (!((FactBase) fB).getFact().containsAll(nfB.getFact()));
         /*
