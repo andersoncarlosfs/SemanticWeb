@@ -3,6 +3,9 @@
  */
 package sw.hornRule.algorithms;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.concurrent.atomic.AtomicInteger;
 import sw.hornRule.models.FactBase;
 import sw.hornRule.models.Formalism;
 import sw.hornRule.models.HornRule;
@@ -15,6 +18,11 @@ import sw.hornRule.models.Variable;
  */
 public class ReasoningForwardChaining extends AlogrithmChaining {
 
+    private Integer interactionNumber = 0;
+    private HashMap<Integer, HashSet<HornRule>> realisableRules = new HashMap<>();
+    private HashMap<Integer, HashSet<Variable>> deducedFacts = new HashMap<>();
+    private HashMap<Integer, HashMap<Variable, AtomicInteger>> matchesNumber = new HashMap<>();
+
     /**
      * @param ruleBase knowledge base kb (in a given formalism)
      * @param factBase (in a given formalism)
@@ -24,18 +32,40 @@ public class ReasoningForwardChaining extends AlogrithmChaining {
      */
     //It's your turn to implement the algorithm, including the methods match() and eval()
     public FactBase forwardChaining(Formalism ruleBase, Formalism factBase) {
-        FactBase fB = new FactBase(((FactBase) factBase).getFact());
+        FactBase fB = new FactBase();
+        FactBase nfB = new FactBase();
+        fB.getFact().addAll(((FactBase) factBase).getFact());
+        nfB.getFact().addAll(((FactBase) factBase).getFact());
         do {
-            ((FactBase) factBase).getFact().addAll(fB.getFact());
+            fB.getFact().addAll(nfB.getFact());
             //HornRuleBase visited = new HornRuleBase();
+            realisableRules.putIfAbsent(interactionNumber, new HashSet<>());
+            deducedFacts.putIfAbsent(interactionNumber, new HashSet<>());
+            matchesNumber.putIfAbsent(interactionNumber, new HashMap<>());
             for (HornRule rule : ((HornRuleBase) ruleBase).getRules()) {
-                if (eval(rule, (FactBase) factBase)) {
-                    fB.getFact().addAll(rule.getConclusions());
+                if (eval(rule, (FactBase) fB)) {
+                    nfB.getFact().addAll(rule.getConclusions());
                     //visited.getRules().add(rule);
+                    realisableRules.get(interactionNumber).add(rule);
+                    for (Variable conclusion : rule.getConclusions()) {
+                        if (!((FactBase) fB).getFact().contains(conclusion)) {
+                            deducedFacts.get(interactionNumber).add(conclusion);
+                        }
+                    }
                 }
             }
             //((HornRuleBase) ruleBase).getRules().removeAll(visited.getRules());
-        } while (!((FactBase) factBase).getFact().containsAll(fB.getFact()));
+            interactionNumber++;
+        } while (!((FactBase) fB).getFact().containsAll(nfB.getFact()));
+        for (int i = 0; i < interactionNumber; i++) {
+            System.out.println("iteraction: " + i + " realisable rules: " + realisableRules.get(i));
+            System.out.println("iteraction: " + i + " deduced facts: " + deducedFacts.get(i));
+            System.out.println("iteraction: " + i + " matches: " + matchesNumber.get(i));
+        }
+        interactionNumber = 0;
+        realisableRules = new HashMap<>();
+        deducedFacts = new HashMap<>();
+        matchesNumber = new HashMap<>();
         return fB;
     }
 
@@ -52,10 +82,10 @@ public class ReasoningForwardChaining extends AlogrithmChaining {
     }
 
     /**
-     * 
+     *
      * @param hornRule
      * @param factBase
-     * @return 
+     * @return
      */
     private boolean eval(HornRule hornRule, FactBase factBase) {
         for (Variable condition : hornRule.getConditions()) {
@@ -67,13 +97,19 @@ public class ReasoningForwardChaining extends AlogrithmChaining {
     }
 
     /**
-     * 
+     *
      * @param condition
      * @param factBase
-     * @return 
+     * @return
      */
     private boolean match(Variable condition, FactBase factBase) {
-        return factBase.getFact().contains(condition);
+        if (factBase.getFact().contains(condition)) {
+            matchesNumber.get(interactionNumber).putIfAbsent(condition, new AtomicInteger(0));
+            matchesNumber.get(interactionNumber).get(condition).incrementAndGet();
+            return true;
+        }
+        return false;
+        //return factBase.getFact().contains(condition);
     }
 
 }
