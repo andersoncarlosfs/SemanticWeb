@@ -17,7 +17,7 @@ import sw.hornRule.models.Variable;
  * @author Anderson Carlos Ferreira da Silva
  *
  */
-public class ReasoningForwardChainingOptimised extends AlogrithmChaining {
+public class ReasoningForwardChainingOptimisedWithIndex extends AlogrithmChaining {
 
     private HashMap<Variable, HashSet<HornRule>> realisableRules = new HashMap<>();
     private HashMap<Variable, HashSet<HornRule>> updatedRules = new HashMap<>();
