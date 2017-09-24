@@ -52,10 +52,28 @@ public class ReasoningForwardChaining extends AlogrithmChaining {
     }
 
     /**
-     *
+     * 
+     * @param hornRule
+     * @param factBase
+     * @return 
      */
-    private boolean eval(HornRule rule, FactBase factBase) {
-        return factBase.getFact().containsAll(rule.getConditions());
+    private boolean eval(HornRule hornRule, FactBase factBase) {
+        for (Variable condition : hornRule.getConditions()) {
+            if (!match(condition, factBase)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 
+     * @param condition
+     * @param factBase
+     * @return 
+     */
+    private boolean match(Variable condition, FactBase factBase) {
+        return factBase.getFact().contains(condition);
     }
 
 }
