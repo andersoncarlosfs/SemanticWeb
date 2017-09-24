@@ -32,8 +32,10 @@ public class ReasoningForwardChaining extends AlogrithmChaining {
      */
     //It's your turn to implement the algorithm, including the methods match() and eval()
     public FactBase forwardChaining(Formalism ruleBase, Formalism factBase) {
+        HornRuleBase rB = new HornRuleBase();
         FactBase fB = new FactBase();
         FactBase nfB = new FactBase();
+        rB.getRules().addAll(((HornRuleBase) ruleBase).getRules());
         fB.getFact().addAll(((FactBase) factBase).getFact());
         nfB.getFact().addAll(((FactBase) factBase).getFact());
         do {
@@ -42,7 +44,7 @@ public class ReasoningForwardChaining extends AlogrithmChaining {
             realisableRules.putIfAbsent(interactionNumber, new HashSet<>());
             deducedFacts.putIfAbsent(interactionNumber, new HashSet<>());
             matchesNumber.putIfAbsent(interactionNumber, new HashMap<>());
-            for (HornRule rule : ((HornRuleBase) ruleBase).getRules()) {
+            for (HornRule rule : rB.getRules()) {
                 if (eval(rule, (FactBase) fB)) {
                     nfB.getFact().addAll(rule.getConclusions());
                     //visited.getRules().add(rule);
@@ -54,7 +56,7 @@ public class ReasoningForwardChaining extends AlogrithmChaining {
                     }
                 }
             }
-            //((HornRuleBase) ruleBase).getRules().removeAll(visited.getRules());
+            //rB.getRules().removeAll(visited.getRules());
             interactionNumber++;
         } while (!((FactBase) fB).getFact().containsAll(nfB.getFact()));
         for (int i = 0; i < interactionNumber; i++) {
