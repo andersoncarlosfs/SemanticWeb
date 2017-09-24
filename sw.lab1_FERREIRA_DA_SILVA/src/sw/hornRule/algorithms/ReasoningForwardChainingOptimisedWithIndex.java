@@ -5,6 +5,7 @@ package sw.hornRule.algorithms;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import sw.hornRule.models.FactBase;
@@ -36,8 +37,9 @@ public class ReasoningForwardChainingOptimisedWithIndex extends AlogrithmChainin
      */
     private HashMap<Variable, HashSet<HornRule>> index = new HashMap<>();
 
-    private HashMap<Variable, HashSet<HornRule>> realisableRules = new HashMap<>();
-    private HashMap<Variable, HashSet<HornRule>> updatedRules = new HashMap<>();
+    private LinkedHashSet<Variable> propagationOrder = new LinkedHashSet<>();
+    private HashMap<Variable, HashSet<String>> realisableRules = new HashMap<>();
+    private HashMap<Variable, HashSet<String>> updatedRules = new HashMap<>();
     private HashMap<Variable, HashSet<Variable>> deducedFacts = new HashMap<>();
     private HashMap<Variable, HashMap<Variable, AtomicInteger>> matchesNumber = new HashMap<>();
 
@@ -65,6 +67,7 @@ public class ReasoningForwardChainingOptimisedWithIndex extends AlogrithmChainin
         fB.getFact().addAll(((FactBase) factBase).getFact());
         for (Variable fact : ((FactBase) factBase).getFact()) {
 
+            propagationOrder.add(fact);
             realisableRules.putIfAbsent(fact, new HashSet<>());
             updatedRules.putIfAbsent(fact, new HashSet<>());
             deducedFacts.putIfAbsent(fact, new HashSet<>());
@@ -73,7 +76,7 @@ public class ReasoningForwardChainingOptimisedWithIndex extends AlogrithmChainin
             fB.getFact().addAll(propagate(fact).getFact());
         }
 
-        for (Variable fact : fB.getFact()) {
+        for (Variable fact : propagationOrder) {
             System.out.println("fact: " + fact + " realisable rules: " + realisableRules.get(fact));
             System.out.println("fact: " + fact + " updated rules: " + updatedRules.get(fact));
             System.out.println("fact: " + fact + " deduced facts: " + deducedFacts.get(fact));
@@ -82,6 +85,7 @@ public class ReasoningForwardChainingOptimisedWithIndex extends AlogrithmChainin
 
         index = new HashMap<>();
 
+        propagationOrder = new LinkedHashSet<>();
         realisableRules = new HashMap<>();
         updatedRules = new HashMap<>();
         deducedFacts = new HashMap<>();
@@ -107,7 +111,7 @@ public class ReasoningForwardChainingOptimisedWithIndex extends AlogrithmChainin
         HashSet<HornRule> rules = new HashSet<>();
         for (HornRule rule : index.getOrDefault(fact, rules)) {
 
-            realisableRules.get(fact).add(rule);
+            realisableRules.get(fact).add(rule.toString());
             matchesNumber.get(fact).putIfAbsent(fact, new AtomicInteger(0));
             matchesNumber.get(fact).get(fact).getAndIncrement();
 
@@ -117,7 +121,7 @@ public class ReasoningForwardChainingOptimisedWithIndex extends AlogrithmChainin
                 deducedFacts.get(fact).addAll(rule.getConclusions());
                 fB.getFact().addAll(rule.getConclusions());
             } else {
-                updatedRules.get(fact).add(rule);
+                updatedRules.get(fact).add(rule.toString());
             }
         }
         index.getOrDefault(fact, rules).removeAll(rules);
@@ -125,16 +129,18 @@ public class ReasoningForwardChainingOptimisedWithIndex extends AlogrithmChainin
         nfB.getFact().addAll(fB.getFact());
         for (Variable f : fB.getFact()) {
 
+            propagationOrder.add(f);
             realisableRules.putIfAbsent(f, new HashSet<>());
             updatedRules.putIfAbsent(f, new HashSet<>());
             deducedFacts.putIfAbsent(f, new HashSet<>());
             matchesNumber.putIfAbsent(f, new HashMap<>());
 
             nfB.getFact().addAll(propagate(f).getFact());
-
+            /*
             realisableRules.get(fact).addAll(realisableRules.get(f));
             updatedRules.get(fact).addAll(updatedRules.get(f));
             deducedFacts.get(fact).addAll(deducedFacts.get(f));
+            
             for (Map.Entry<Variable, AtomicInteger> entry : matchesNumber.get(f).entrySet()) {
                 matchesNumber.get(fact).putIfAbsent(entry.getKey(), new AtomicInteger(0));
                 matchesNumber.get(fact).get(entry.getKey()).getAndAdd(entry.getValue().get());
@@ -143,7 +149,7 @@ public class ReasoningForwardChainingOptimisedWithIndex extends AlogrithmChainin
             updatedRules.remove(f);
             deducedFacts.remove(f);
             matchesNumber.remove(f);
-
+            */            
         }
         return nfB;
     }

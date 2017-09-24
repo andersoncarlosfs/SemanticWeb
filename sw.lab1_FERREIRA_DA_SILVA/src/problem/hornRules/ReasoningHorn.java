@@ -11,7 +11,7 @@ public class ReasoningHorn {
 
         Scanner scanner = new Scanner(System.in);
 
-        AlogrithmChaining reasoner = new ReasoningForwardChaining();
+        AlogrithmChaining reasoner = new ReasoningForwardChainingOptimisedWithIndex();
         Tutorial1 pb = new Tutorial1();
         HornRuleBase kb = pb.getRuleBase();
         FactBase fb = pb.getFactBase();
