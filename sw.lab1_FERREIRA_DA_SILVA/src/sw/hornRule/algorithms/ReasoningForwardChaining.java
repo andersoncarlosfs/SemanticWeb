@@ -18,12 +18,11 @@ import sw.hornRule.models.Variable;
  */
 public class ReasoningForwardChaining extends AlogrithmChaining {
 
-    /*
     private Integer interactionNumber = 0;
-   private HashMap<Integer, HashSet<HornRule>> realisableRules = new HashMap<>();
+    private HashMap<Integer, HashSet<HornRule>> realisableRules = new HashMap<>();
     private HashMap<Integer, HashSet<Variable>> deducedFacts = new HashMap<>();
     private HashMap<Integer, HashMap<Variable, AtomicInteger>> matchesNumber = new HashMap<>();
-     */
+
     /**
      * @param ruleBase knowledge base kb (in a given formalism)
      * @param factBase (in a given formalism)
@@ -41,40 +40,40 @@ public class ReasoningForwardChaining extends AlogrithmChaining {
         nfB.getFact().addAll(((FactBase) factBase).getFact());
         do {
             fB.getFact().addAll(nfB.getFact());
-            /*
+
             HornRuleBase rules = new HornRuleBase();
             realisableRules.putIfAbsent(interactionNumber, new HashSet<>());
             deducedFacts.putIfAbsent(interactionNumber, new HashSet<>());
             matchesNumber.putIfAbsent(interactionNumber, new HashMap<>());
-             */
+
             for (HornRule rule : rB.getRules()) {
                 if (eval(rule, (FactBase) fB)) {
                     nfB.getFact().addAll(rule.getConclusions());
                     //rules.getRules().add(rule);
-                    //realisableRules.get(interactionNumber).add(rule);
-                    /*
+                    realisableRules.get(interactionNumber).add(rule);
+
                     for (Variable conclusion : rule.getConclusions()) {
                         if (!((FactBase) fB).getFact().contains(conclusion)) {
-                            //deducedFacts.get(interactionNumber).add(conclusion);
+                            deducedFacts.get(interactionNumber).add(conclusion);
                         }
                     }
-                     */
+
                 }
             }
             //rB.getRules().removeAll(rules.getRules());
-            //interactionNumber++;
+            interactionNumber++;
         } while (!((FactBase) fB).getFact().containsAll(nfB.getFact()));
-        /*
+
         for (int i = 0; i < interactionNumber; i++) {
             System.out.println("iteraction: " + i + " realisable rules: " + realisableRules.get(i));
             System.out.println("iteraction: " + i + " deduced facts: " + deducedFacts.get(i));
             System.out.println("iteraction: " + i + " matches: " + matchesNumber.get(i));
-        }        
+        }
         interactionNumber = 0;
         realisableRules = new HashMap<>();
         deducedFacts = new HashMap<>();
         matchesNumber = new HashMap<>();
-         */
+
         return fB;
     }
 
@@ -112,15 +111,15 @@ public class ReasoningForwardChaining extends AlogrithmChaining {
      * @return
      */
     private boolean match(Variable condition, FactBase factBase) {
-        /*
+
         if (factBase.getFact().contains(condition)) {
             matchesNumber.get(interactionNumber).putIfAbsent(condition, new AtomicInteger(0));
             matchesNumber.get(interactionNumber).get(condition).incrementAndGet();
             return true;
         }
         return false;
-         */
-        return factBase.getFact().contains(condition);
+
+        //return factBase.getFact().contains(condition);
     }
 
 }
