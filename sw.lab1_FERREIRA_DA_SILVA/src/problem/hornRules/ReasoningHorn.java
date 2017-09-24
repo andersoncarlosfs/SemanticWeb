@@ -11,7 +11,7 @@ public class ReasoningHorn {
 
         Scanner scanner = new Scanner(System.in);
 
-        AlogrithmChaining reasoner = new ReasoningForwardChaining();
+        AlogrithmChaining reasoner = new ReasoningForwardChainingOptimised();
         Tutorial1 pb = new Tutorial1();
         HornRuleBase kb = pb.getRuleBase();
         FactBase fb = pb.getFactBase();
@@ -28,9 +28,8 @@ public class ReasoningHorn {
 
         //fb.getFact().remove(new Variable("boat"));
 
-        
         //Display all facts inferred by the given knowledge base kb and fact base fb
-        HashSet<Variable> inferredAllFacts = ((ReasoningForwardChaining) reasoner).forwardChaining(kb, fb).getFact();
+        HashSet<Variable> inferredAllFacts = ((ReasoningForwardChainingOptimised) reasoner).forwardChaining(kb, fb).getFact();
         System.out.println("All the inferred facts are:");
         for (Variable s : inferredAllFacts) {
             System.out.println(s);
