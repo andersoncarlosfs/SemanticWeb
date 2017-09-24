@@ -27,14 +27,14 @@ public class ReasoningForwardChaining extends AlogrithmChaining {
         FactBase fB = new FactBase(((FactBase) factBase).getFact());
         do {
             ((FactBase) factBase).getFact().addAll(fB.getFact());
-            HornRuleBase visited = new HornRuleBase();
+            //HornRuleBase visited = new HornRuleBase();
             for (HornRule rule : ((HornRuleBase) ruleBase).getRules()) {
                 if (eval(rule, (FactBase) factBase)) {
                     fB.getFact().addAll(rule.getConclusions());
-                    visited.getRules().add(rule);
+                    //visited.getRules().add(rule);
                 }
             }
-            ((HornRuleBase) ruleBase).getRules().removeAll(visited.getRules());
+            //((HornRuleBase) ruleBase).getRules().removeAll(visited.getRules());
         } while (!((FactBase) factBase).getFact().containsAll(fB.getFact()));
         return fB;
     }
