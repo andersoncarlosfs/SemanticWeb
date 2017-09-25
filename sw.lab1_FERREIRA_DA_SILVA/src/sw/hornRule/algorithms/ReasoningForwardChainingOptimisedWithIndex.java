@@ -59,11 +59,11 @@ public class ReasoningForwardChainingOptimisedWithIndex extends AlogrithmChainin
                 index.get(condition).add(rule);
             }
         }
-
+        /*
         for (Map.Entry<Variable, HashSet<HornRule>> entry : index.entrySet()) {
             System.out.println(entry.getKey() + " => " + entry.getValue());
         }
-
+         */
         FactBase fB = new FactBase();
         fB.getFact().addAll(((FactBase) factBase).getFact());
         for (Variable fact : ((FactBase) factBase).getFact()) {
